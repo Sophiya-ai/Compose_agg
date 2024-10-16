@@ -50,7 +50,7 @@ class ZooKeeper():
         ZooKeeper.zookeepers.append(self)
 
     def feed_animal(self, animal):
-        print(f"{self.name} кормит {animal}")
+        print(f"Смотритель {self.name} кормит животное - {animal}")
 
 class Vet():
     vets = []
@@ -60,7 +60,7 @@ class Vet():
         Vet.vets.append(self)
 
     def heat_animal(self, animal):
-        print(f"{self.name} лечит {animal}")
+        print(f"Ветеринар {self.name} лечит животное - {animal}")
 
 class Zoo():
     zoos = []
@@ -152,11 +152,13 @@ def menu():
 
 print("Приветствуем в менеджере зоопарка!\n")
 zoo_name = input("Введите название зоопарка: ")
-Bird("тетерев", 2, "курообразные")
-Reptile("черепаха",100,"нк")
-Mammal("волк",5,"х")
-ZooKeeper("Ростовцев","у")
-Vet("Иванов","у")
+b = Bird("тетерев", 2, "курообразные")
+r = Reptile("черепаха",100,"нк")
+m = Mammal("волк",5,"х")
+z = ZooKeeper("Ростовцев","у")
+v = Vet("Иванов","у")
+v.heat_animal(b.name)
+z.feed_animal(r.name)
 zoo = Zoo(zoo_name, Bird.birds, Mammal.mammals, Reptile.reptiles,ZooKeeper.zookeepers,Vet.vets)
 act = 10
 animals = []
