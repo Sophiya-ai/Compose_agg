@@ -1,3 +1,5 @@
+import pickle
+
 class Animal ():
     def __init__(self, name, age):
         self.name = name
@@ -8,6 +10,7 @@ class Animal ():
 
     def eat(self):
         print(f"{self.name} кушает")
+
 
 class Bird(Animal):
     birds = []
@@ -60,6 +63,7 @@ class Vet():
         print(f"{self.name} лечит {animal}")
 
 class Zoo():
+    zoos = []
     def __init__(self, name, birds, mammals , reptiles , zookeepers , vets):
         self.name = name
         self.birds = birds
@@ -67,6 +71,7 @@ class Zoo():
         self.reptiles = reptiles
         self.zookeepers = zookeepers
         self.vets = vets
+        Zoo.zoos.append(self)
 
     def add_animals(self):
         class_animal = int(input("Введите класс животного, добавляемого в зоопарк (выберите номер):\n"
@@ -106,6 +111,31 @@ class Zoo():
             self.zookeepers = ZooKeeper.zookeepers
             print(f"Смотритель - {zk.name}, специализация -  {zk.spec} ВЗЯТ на работу в зоопарк")
 
+    def output_staff_zoo(self):
+        for i, man in enumerate(self.vets):
+            print(f'Ветеринар {i}: {man.name} Специализация: {man.spec}')
+        for i, man in enumerate(self.zookeepers):
+            print(f'Служащий {i}: {man.name} Специализация: {man.spec}')
+
+    def output_animals_zoo(self):
+        print('Птицы:')
+        for i, item in enumerate(self.birds):
+            print(f'{i}: {item.name} Возраст: {item.age} Вид: {item.type}')
+        print('Млекопитающие:')
+        for i, item in enumerate(self.mammals):
+            print(f'{i}: {item.name} Возраст: {item.age} Тип: {item.type_of_eating}')
+        print('Рептилии:')
+        for i, item in enumerate(self.reptiles):
+            print(f'{i}: {item.name} Возраст: {item.age} Тип: {item.new_skin}')
+
+    def update_classes(self):
+        Bird.birds = self.birds
+        Mammal.mammals = self.mammals
+        Reptile.reptiles = self.reptiles
+        ZooKeeper.zookeepers = self.zookeepers
+        Vet.vets = self.vets
+
+
 def animal_sounds(animals):
     for animal in animals:
         animal.make_sound()
@@ -123,10 +153,10 @@ def menu():
 print("Приветствуем в менеджере зоопарка!\n")
 zoo_name = input("Введите название зоопарка: ")
 Bird("тетерев", 2, "курообразные")
-Reptile("черепаха",100,"новая кожа")
-Mammal("волк",5,"хищник")
-ZooKeeper("Ростовцев","универсал")
-Vet("Иванов","универсал")
+Reptile("черепаха",100,"нк")
+Mammal("волк",5,"х")
+ZooKeeper("Ростовцев","у")
+Vet("Иванов","у")
 zoo = Zoo(zoo_name, Bird.birds, Mammal.mammals, Reptile.reptiles,ZooKeeper.zookeepers,Vet.vets)
 act = 10
 animals = []
@@ -137,31 +167,38 @@ while act != 0:
         animals.extend(Mammal.mammals)
         animals.extend(Reptile.reptiles)
         animal_sounds(animals)
+        animals = []
     if act == 2:
         while True:
             zoo.add_staff()
             choice = input("Вы хотите добавить еще сотрудника? (да/нет):  ").lower()
             if choice != "да":
-                for i, man in enumerate(zoo.vets):
-                    print(f'Ветеринар {i}: {man.name} Специализация: {man.spec}')
-                for i, man in enumerate(zoo.zookeepers):
-                    print(f'Служащий {i}: {man.name} Специализация: {man.spec}')
+                zoo.output_staff_zoo()
                 break
     if act == 3:
         while True:
             zoo.add_animals()
             choice = input("Вы хотите добавить еще животное? (да/нет):  ").lower()
             if choice != "да":
-                print('Птицы:')
-                for i, item in enumerate(zoo.birds):
-                    print(f'{i}: {item.name} Возраст: {item.age} Вид: {item.type}')
-                print('Млекопитающие:')
-                for i, item in enumerate(zoo.mammals):
-                    print(f'{i}: {item.name} Возраст: {item.age} Тип: {item.type_of_eating}')
-                print('Рептилии:')
-                for i, item in enumerate(zoo.reptiles):
-                    print(f'{i}: {item.name} Возраст: {item.age} Тип: {item.new_skin}')
+                zoo.output_animals_zoo()
                 break
+    if act == 4:
+        with open('zoos.pkl','wb') as file:
+            pickle.dump(Zoo.zoos,file)
+    if act == 5:
+        with open('zoos.pkl','rb') as file:
+            Zoo.zoos = pickle.load(file)
+        zoo.output_staff_zoo()
+        zoo.output_animals_zoo()
+        zoo.update_classes()
+        animals.extend(Bird.birds)
+        animals.extend(Mammal.mammals)
+        animals.extend(Reptile.reptiles)
+        for animal in animals:
+            print(animal.name,animal.age)
+        animals = []
+
+
 
 
 
