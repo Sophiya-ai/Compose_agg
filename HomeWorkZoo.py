@@ -135,20 +135,22 @@ class Zoo():
         ZooKeeper.zookeepers = self.zookeepers
         Vet.vets = self.vets
 
+    def menu(self):
+        act = input(f"Выберите действие с зоопарком {self.name.upper()} :\n"
+                    "1. Узнать что говорят животные\n"
+                    "2. Добавить сотрудника\n"
+                    "3. Добавить животное\n"
+                    "4. Сохранить данные зоопарка\n"
+                    "5. Открыть данные зоопарка\n"
+                    "0 - Завершение работы\n")
+        return act
+
 
 def animal_sounds(animals):
     for animal in animals:
         animal.make_sound()
 
-def menu():
-    act = input("Выберите действие:\n"
-            "1. Узнать что говорят животные\n"
-            "2. Добавить сотрудника\n"
-            "3. Добавить животное\n"
-            "4. Сохранить данные зоопарка\n"
-            "5. Открыть данные зоопарка\n"
-            "0 - Завершение работы\n")
-    return act
+
 
 print("Приветствуем в менеджере зоопарка!\n")
 zoo_name = input("Введите название зоопарка: ")
@@ -163,7 +165,7 @@ zoo = Zoo(zoo_name, Bird.birds, Mammal.mammals, Reptile.reptiles,ZooKeeper.zooke
 act = 10
 animals = []
 while act != 0:
-    act = int(menu())
+    act = int(zoo.menu())
     if act == 1:
         animals.extend(Bird.birds)
         animals.extend(Mammal.mammals)
